@@ -1,3 +1,17 @@
+class Nodo:
+    def __init__(self, acao: str, estado: str, pai, custo: int):
+        self.acao = acao
+        self.estado = estado
+        self.pai = pai
+        self.custo = custo
+
+    def __str__(self):
+        return f"acao:{self.acao}, estado:{self.estado}, pai:{repr(self.pai)}, custo:{self.custo}"
+
+    def __repr__(self):
+        return f"Nodo({self.acao}, {self.estado}, {self.pai}, {self.custo})"
+
+
 def sucessor(estado: str):
     index_branco : int = estado.find('_')
     estado = list(estado)
@@ -33,4 +47,15 @@ def sucessor(estado: str):
 
     return movimentos
 
-print(sucessor("2_3541687"))
+
+def expande(nodo):
+    movimentos = sucessor(nodo.estado)
+    conjunto_nodos = [Nodo(movimento[0], movimento[1], nodo, nodo.custo+1) for movimento in movimentos]
+    return conjunto_nodos
+
+if __name__ == "__main__":
+    nodo_pai = Nodo("null", "2_3541687", None, 0)
+    nodos = expande(nodo_pai)
+    for nodo in nodos:
+        print(nodo)
+
