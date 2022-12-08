@@ -11,6 +11,15 @@ class Nodo:
     def __repr__(self):
         return f"Nodo({self.acao}, {self.estado}, {self.pai}, {self.custo})"
 
+    # caminho é a lista de movimentos dos nós anteriores
+    def pegaRaiz(self, caminho = []):
+        # Insere a si mesmo
+        caminho.insert(0, self.acao)
+        # Se tem pai, pede que ele busque a raiz
+        if self.pai is not None:
+            return self.pai.pegaRaiz(caminho)
+        
+        return caminho
 
 def sucessor(estado: str):
     index_branco : int = estado.find('_')
@@ -50,12 +59,29 @@ def sucessor(estado: str):
 
 def expande(nodo):
     movimentos = sucessor(nodo.estado)
-    conjunto_nodos = [Nodo(movimento[0], movimento[1], nodo, nodo.custo+1) for movimento in movimentos]
+    conjunto_nodos = [Nodo(movimento[0], movimento[1], nodo, nodo.custo + 1) for movimento in movimentos]
     return conjunto_nodos
+
+def bfs(estado):
+    X = []
+    F = [Nodo("null", estado, None, 0)]
+    while True:
+        if len(F) == 0:
+            break
+        
+        v = F.pop() # Pega primeiro elemento
+        if v.estado == "12345678_":
+            return v.pegaRaiz()
+        
+        if v not in X:
+            X.append(v) # Insere no fim da lista (fila) 
+            vizinhos = expande(v)
+            for vizinho in vizinhos:
+                F.append(vizinho)
 
 if __name__ == "__main__":
     nodo_pai = Nodo("null", "2_3541687", None, 0)
-    nodos = expande(nodo_pai)
+    nodos = bfs("2_3541687")
     for nodo in nodos:
         print(nodo)
 
