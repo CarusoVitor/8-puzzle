@@ -27,5 +27,4 @@ jobs:
         bash prepara.sh
     - name: Testes do professor
       run: |
-        pip install timer
         python testa_solucao.py
