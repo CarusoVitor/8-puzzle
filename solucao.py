@@ -84,6 +84,17 @@ def bfs(estado):
                 F.append(vizinho)
     return -1
 
+def dfs(estado):
+    raise NotImplementedError
+
+
+def astar_hamming(estado):
+    raise NotImplementedError
+
+
+def astar_manhattan(estado):
+    raise NotImplementedError
+
 
 if __name__ == "__main__":
     nodos = bfs("123_45678")
