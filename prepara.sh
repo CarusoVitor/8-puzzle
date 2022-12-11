@@ -1,0 +1,1 @@
+echo Não há nenhuma dependência adicional! Não inclua esse arquivo na entrega!
