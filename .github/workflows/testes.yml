@@ -24,7 +24,7 @@ jobs:
     - name: Instala dependências
       run: |
         python -m pip install --upgrade pip
-        prepara.sh
+        bash prepara.sh
     - name: Testes do professor
       run: |
-        testa_solucao.py
+        python testa_solucao.py
