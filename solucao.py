@@ -1,5 +1,7 @@
+from _collections import deque
+
 class Nodo:
-    def __init__(self, acao: str, estado: str, pai, custo: int):
+    def __init__(self, estado: str or None, pai, acao: str or None, custo: int):
         self.acao = acao
         self.estado = estado
         self.pai = pai
@@ -9,24 +11,28 @@ class Nodo:
         return f"acao:{self.acao}, estado:{self.estado}, pai:{repr(self.pai)}, custo:{self.custo}"
 
     def __repr__(self):
-        return f"Nodo({self.acao}, {self.estado}, {self.pai}, {self.custo})"
+        return f"Nodo({self.acao}, {self.estado})"
+
+    def __eq__(self, other):
+        return self.estado == other.estado
 
     # caminho é a lista de movimentos dos nós anteriores
-    def pegaRaiz(self, caminho = []):
+    def pegaRaiz(self, caminho=[]):
         # Insere a si mesmo
         caminho.insert(0, self.acao)
         # Se tem pai, pede que ele busque a raiz
         if self.pai is not None:
             return self.pai.pegaRaiz(caminho)
-        
+
         return caminho
 
+
 def sucessor(estado: str):
-    index_branco : int = estado.find('_')
+    index_branco: int = estado.find('_')
     estado = list(estado)
     movimentos = []
 
-    # movimento direita   
+    # movimento direita
     if index_branco % 3 != 2:
         index_direita = index_branco + 1
         estado_direita = estado.copy()
@@ -59,29 +65,28 @@ def sucessor(estado: str):
 
 def expande(nodo):
     movimentos = sucessor(nodo.estado)
-    conjunto_nodos = [Nodo(movimento[0], movimento[1], nodo, nodo.custo + 1) for movimento in movimentos]
+    conjunto_nodos = [Nodo(estado, nodo, acao, nodo.custo + 1) for acao, estado in movimentos]
     return conjunto_nodos
+
 
 def bfs(estado):
     X = []
-    F = [Nodo("null", estado, None, 0)]
-    while True:
-        if len(F) == 0:
-            break
-        
-        v = F.pop() # Pega primeiro elemento
+    F = deque([Nodo(estado, None, None, 0)])
+    while len(F) != 0:
+        v = F.popleft()  # Pega primeiro elemento
         if v.estado == "12345678_":
             return v.pegaRaiz()
-        
+
         if v not in X:
-            X.append(v) # Insere no fim da lista (fila) 
+            X.append(v)  # Insere no fim da lista (fila)
             vizinhos = expande(v)
             for vizinho in vizinhos:
                 F.append(vizinho)
+    return -1
+
 
 if __name__ == "__main__":
-    nodo_pai = Nodo("null", "2_3541687", None, 0)
-    nodos = bfs("2_3541687")
+    nodos = bfs("123_45678")
     for nodo in nodos:
         print(nodo)
 
