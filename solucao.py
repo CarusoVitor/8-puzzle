@@ -1,4 +1,6 @@
 from _collections import deque
+from time import time
+
 
 class Nodo:
     def __init__(self, estado: str or None, pai, acao: str or None, custo: int):
@@ -16,12 +18,14 @@ class Nodo:
     def __eq__(self, other):
         return self.estado == other.estado
 
+    def __hash__(self):
+        return hash(self.estado)
+
     # caminho é a lista de movimentos dos nós anteriores
     def pegaRaiz(self, caminho=[]):
-        # Insere a si mesmo
-        caminho.insert(0, self.acao)
         # Se tem pai, pede que ele busque a raiz
         if self.pai is not None:
+            caminho.insert(0, self.acao) # Insere a si mesmo
             return self.pai.pegaRaiz(caminho)
 
         return caminho
@@ -70,19 +74,19 @@ def expande(nodo):
 
 
 def bfs(estado):
-    X = []
+    X = set()
     F = deque([Nodo(estado, None, None, 0)])
     while len(F) != 0:
         v = F.popleft()  # Pega primeiro elemento
         if v.estado == "12345678_":
             return v.pegaRaiz()
-
         if v not in X:
-            X.append(v)  # Insere no fim da lista (fila)
+            X.add(v)  # Insere no fim da lista (fila)
             vizinhos = expande(v)
             for vizinho in vizinhos:
                 F.append(vizinho)
-    return -1
+    return None
+
 
 def dfs(estado):
     raise NotImplementedError
@@ -97,7 +101,12 @@ def astar_manhattan(estado):
 
 
 if __name__ == "__main__":
-    nodos = bfs("123_45678")
+    t0 = time()
+    nodos = bfs("2_3541687")
+    print(time() - t0)
     for nodo in nodos:
         print(nodo)
+    # print(heuristica_hamming("13245876_"))
+    # print(distancia_linha_reta(4, 1))
+
 
