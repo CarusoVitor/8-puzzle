@@ -86,18 +86,21 @@ def bfs(estado):
     return None
 
 
-def dfs(estado, depth=65):
-    X = set()
-    F = deque([Nodo(estado, None, None, 0)])
-    while len(F) != 0:
-        v = F.pop()  # Pega ultimo elemento
-        if v.estado == "12345678_":
-            return v.pegaRaiz()
-        if v not in X and v.custo < depth:
-            X.add(v)
-            vizinhos = expande(v)
-            for vizinho in vizinhos:
-                F.append(vizinho) # Insere no fim da pilha
+def dfs(estado, profundidade_maxima=65):
+    profundidade_atual = 0
+    while profundidade_atual < profundidade_maxima:
+        X = set()
+        F = deque([Nodo(estado, None, None, 0)])
+        while len(F) != 0:
+            v = F.pop()  # Pega ultimo elemento
+            if v.estado == "12345678_":
+                return v.pegaRaiz()
+            if v not in X and v.custo < profundidade_atual:
+                X.add(v)
+                vizinhos = expande(v)
+                for vizinho in vizinhos:
+                    F.append(vizinho) # Insere no fim da pilha
+        profundidade_atual += 1
     return None
 
 
