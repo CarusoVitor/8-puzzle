@@ -1,7 +1,6 @@
 from _collections import deque
 from time import time
 
-
 class Nodo:
     def __init__(self, estado: str or None, pai, acao: str or None, custo: int):
         self.acao = acao
@@ -27,7 +26,6 @@ class Nodo:
         if self.pai is not None:
             caminho.insert(0, self.acao) # Insere a si mesmo
             return self.pai.pegaRaiz(caminho)
-
         return caminho
 
 
@@ -81,15 +79,38 @@ def bfs(estado):
         if v.estado == "12345678_":
             return v.pegaRaiz()
         if v not in X:
-            X.add(v)  # Insere no fim da lista (fila)
+            X.add(v)
             vizinhos = expande(v)
             for vizinho in vizinhos:
-                F.append(vizinho)
+                F.append(vizinho) # Insere no fim da lista (fila)
     return None
 
 
-def dfs(estado):
-    raise NotImplementedError
+def dfs(estado, depth=65):
+    X = set()
+    F = deque([Nodo(estado, None, None, 0)])
+    while len(F) != 0:
+        v = F.pop()  # Pega ultimo elemento
+        if v.estado == "12345678_":
+            return v.pegaRaiz()
+        if v not in X and v.custo < depth:
+            X.add(v)
+            vizinhos = expande(v)
+            for vizinho in vizinhos:
+                F.append(vizinho) # Insere no fim da pilha
+    return None
+
+
+def heuristica_hamming(estado):
+    pecas_fora_lugar = 0
+    for p in range(len(estado)-1):
+        if str(p+1) != estado[p]:
+            pecas_fora_lugar += 1
+    return pecas_fora_lugar
+
+
+def heuristica_manhattan(estado):
+    pass
 
 
 def astar_hamming(estado):
@@ -102,11 +123,11 @@ def astar_manhattan(estado):
 
 if __name__ == "__main__":
     t0 = time()
-    nodos = bfs("2_3541687")
+    nodos = dfs("2_3541687")
     print(time() - t0)
-    for nodo in nodos:
-        print(nodo)
-    # print(heuristica_hamming("13245876_"))
-    # print(distancia_linha_reta(4, 1))
-
+    if nodos is not None:
+        for nodo in nodos:
+            print(nodo)
+    else:
+        print("Nao encontrou caminho")
 
