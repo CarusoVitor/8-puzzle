@@ -1,5 +1,6 @@
 from collections import deque
 from time import time
+import heapq
 
 class Nodo:
     def __init__(self, estado: str or None, pai, acao: str or None, custo: int):
@@ -19,6 +20,9 @@ class Nodo:
 
     def __hash__(self):
         return hash(self.estado)
+
+    def __lt__(self, other):
+        return self.custo < other.custo
 
     # caminho é a lista de movimentos dos nós anteriores
     def pegaRaiz(self, caminho=[]):
@@ -129,18 +133,48 @@ def heuristica_manhattan(estado):
 
 
 def astar_hamming(estado):
-    raise NotImplementedError
+    X = set()
+    custo_inicial = 0
+    # Insere no formato (f(item), item)
+    F = [(heuristica_hamming(estado)+custo_inicial, Nodo(estado, None, None, custo_inicial))]
+    while len(F) != 0:
+        v = heapq.heappop(F)[1] # Pega elemento de menor custo
+        if v.estado == "12345678_":
+            return v.pegaRaiz()
+        if v not in X:
+            X.add(v)
+            vizinhos = expande(v)
+            for vizinho in vizinhos:
+                heapq.heappush(F, (heuristica_hamming(estado)+vizinho.custo, vizinho)) # Insere na fila de prioridades
+    return None
 
 
 def astar_manhattan(estado):
-    raise NotImplementedError
+    X = set()
+    custo_inicial = 0
+    # Insere no formato (f(item), item)
+    F = [(heuristica_manhattan(estado)+custo_inicial, Nodo(estado, None, None, custo_inicial))]
+    while len(F) != 0:
+        v = heapq.heappop(F)[1] # Pega elemento de menor custo
+        if v.estado == "12345678_":
+            return v.pegaRaiz()
+        if v not in X:
+            X.add(v)
+            vizinhos = expande(v)
+            for vizinho in vizinhos:
+                heapq.heappush(F, (heuristica_manhattan(estado)+vizinho.custo, vizinho)) # Insere na fila de prioridades
+    return None
 
 
 if __name__ == "__main__":
     t0 = time()
-    nodos = dfs("2_3541687")
+    # nodos = dfs("2_3541687")
+    # nodos = bfs("2_3541687")
+    nodos = astar_hamming("2_3541687")
+    # nodos = astar_manhattan("2_3541687")
     print(time() - t0)
     if nodos is not None:
+        print(len(nodos))
         for nodo in nodos:
             print(nodo)
     else:
