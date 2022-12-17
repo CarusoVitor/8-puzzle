@@ -1,4 +1,4 @@
-from _collections import deque
+from collections import deque
 from time import time
 
 class Nodo:
@@ -113,7 +113,19 @@ def heuristica_hamming(estado):
 
 
 def heuristica_manhattan(estado):
-    pass
+    distancias_manhattan = 0
+    for index in range(len(estado)):
+        peca = estado[index]
+        if peca != '_':
+            linha_correta = (int(peca) - 1) // 3
+            coluna_correta = (int(peca) - 1) % 3
+            linha_atual = index // 3
+            coluna_atual = index % 3
+            distancia_vertical = abs(linha_correta - linha_atual)
+            distancia_horizontal = abs(coluna_correta - coluna_atual)
+            distancias_manhattan += distancia_vertical + distancia_horizontal
+            
+    return distancias_manhattan
 
 
 def astar_hamming(estado):
@@ -133,4 +145,3 @@ if __name__ == "__main__":
             print(nodo)
     else:
         print("Nao encontrou caminho")
-
