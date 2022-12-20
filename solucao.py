@@ -25,7 +25,9 @@ class Nodo:
         return self.custo < other.custo
 
     # caminho é a lista de movimentos dos nós anteriores
-    def pegaRaiz(self, caminho=[]):
+    def pegaRaiz(self, caminho = None):
+        if caminho is None:
+            caminho = []
         # Se tem pai, pede que ele busque a raiz
         if self.pai is not None:
             caminho.insert(0, self.acao) # Insere a si mesmo
@@ -81,6 +83,7 @@ def bfs(estado):
     while len(F) != 0:
         v = F.popleft()  # Pega primeiro elemento
         if v.estado == "12345678_":
+            print(len(X))
             return v.pegaRaiz()
         if v not in X:
             X.add(v)
@@ -98,6 +101,7 @@ def dfs(estado, profundidade_maxima=65):
         while len(F) != 0:
             v = F.pop()  # Pega ultimo elemento
             if v.estado == "12345678_":
+                print(len(X))
                 return v.pegaRaiz()
             if v not in X and v.custo < profundidade_atual:
                 X.add(v)
@@ -140,6 +144,7 @@ def astar_hamming(estado):
     while len(F) != 0:
         v = heapq.heappop(F)[1] # Pega elemento de menor custo
         if v.estado == "12345678_":
+            print(len(X))
             return v.pegaRaiz()
         if v not in X:
             X.add(v)
@@ -157,6 +162,7 @@ def astar_manhattan(estado):
     while len(F) != 0:
         v = heapq.heappop(F)[1] # Pega elemento de menor custo
         if v.estado == "12345678_":
+            print(len(X))
             return v.pegaRaiz()
         if v not in X:
             X.add(v)
@@ -167,15 +173,47 @@ def astar_manhattan(estado):
 
 
 if __name__ == "__main__":
-    t0 = time()
-    # nodos = dfs("2_3541687")
-    # nodos = bfs("2_3541687")
-    nodos = astar_hamming("2_3541687")
-    # nodos = astar_manhattan("2_3541687")
-    print(time() - t0)
-    if nodos is not None:
-        print(len(nodos))
-        for nodo in nodos:
+    print("########### BFS ###########")
+    t1 = time()
+    nodos1 = bfs("2_3541687")
+    print(time() - t1)
+    if nodos1 is not None:
+        print(len(nodos1))
+        for nodo in nodos1:
+            print(nodo)
+    else:
+        print("Nao encontrou caminho")
+
+
+    print("\n########### DFS ###########")
+    t2 = time()
+    nodos2 = dfs("2_3541687")
+    print(time() - t2)    
+    if nodos2 is not None:
+        print(len(nodos2))
+        for nodo in nodos2:
+            print(nodo)
+    else:
+        print("Nao encontrou caminho")
+
+    print("\n########### A* Hamming ###########")
+    t3 = time()
+    nodos3 = astar_hamming("2_3541687")
+    print(time() - t3)    
+    if nodos3 is not None:
+        print(len(nodos3))
+        for nodo in nodos3:
+            print(nodo)
+    else:
+        print("Nao encontrou caminho")
+
+    print("\n########### A* Manhattan ###########")
+    t4 = time()
+    nodos4 = astar_manhattan("2_3541687")
+    print(time() - t4)
+    if nodos4 is not None:
+        print(len(nodos4))
+        for nodo in nodos4:
             print(nodo)
     else:
         print("Nao encontrou caminho")
