@@ -14,7 +14,7 @@ Executamos os algoritmos com a entrada "2_3541687" e analisamos quantos nós sã
 
 | Algoritmos | Nodos expandidos | Tempo de execução (em seg) | Custo do caminho |
 |------------|------------------|----------------------------|------------------|
-| BFS | 22 | 0.698350191116333 | 23 |
-| DFS | 32 | 2.649228096008301 | 33 |
-| A* (heurística hamming) | 22 | 2.6974940299987793 | 23 | 
-| A* (heurística manhattan) | 22 | 3.0969581604003906 | 23 |
+| BFS | 109477 | 0.698350191116333 | 23 |
+| DFS | 64240 | 2.649228096008301 | 33 |
+| A* (heurística hamming) | 107023 | 2.6974940299987793 | 23 | 
+| A* (heurística manhattan) | 107023 | 3.0969581604003906 | 23 |
